@@ -1,13 +1,9 @@
 defmodule KV.Registry do
-  use GenServer
-
-  ## Client API
-
   @doc """
   Starts the registry.
   """
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, :ok, opts)
+    GenServer.start_link(KV.RegistryServer, :ok, opts)
   end
 
   @doc """
@@ -26,22 +22,10 @@ defmodule KV.Registry do
     GenServer.cast(server, {:create, name})
   end
 
-  ## Server Callbacks
-
-  def init(:ok) do
-    {:ok, %{}}
-  end
-
-  def handle_call({:lookup, name}, _from, names) do
-    {:reply, Map.fetch(names, name), names}
-  end
-
-  def handle_cast({:create, name}, names) do
-    if Map.has_key?(names, name) do
-      {:noreply, names}
-    else
-      {:ok, bucket} = KV.Bucket.start_link([])
-      {:noreply, Map.put(names, name, bucket)}
-    end
+  def child_spec(arg) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [arg]}
+    }
   end
 end
