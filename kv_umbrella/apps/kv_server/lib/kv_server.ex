@@ -31,8 +31,11 @@ defmodule KVServer do
   end
 
   defp read_line(socket) do
-    {:ok, data} = :gen_tcp.recv(socket, 0)
-    data
+    case :gen_tcp.recv(socket, 0) do
+      {:ok, data} -> data
+      {:error, :closed} -> "closed"
+      _ -> "error"
+    end
   end
 
   defp write_line(line, socket) do
