@@ -1,4 +1,11 @@
 defmodule KVServer.Command do
+  @doc """
+  Runs the given command.
+  """
+  def run(_command) do
+    {:ok, "OK\r\n"}
+  end
+
   @doc ~S"""
   Parses the given `line` into a command.
 
