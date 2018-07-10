@@ -29,4 +29,10 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
-import_config "routing_table.exs"
+if Mix.env == :test do
+  config :kv, :routing_table, [
+    {?a..?z, :nonode@nohost}
+  ]
+else
+  import_config "routing_table.exs"
+end

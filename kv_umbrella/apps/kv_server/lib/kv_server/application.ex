@@ -6,7 +6,13 @@ defmodule KVServer.Application do
   use Application
 
   def start(_type, _args) do
-    {port, _} = System.get_env("PORT") |> Integer.parse()
+    port_number = System.get_env("PORT")
+
+    if port_number do
+      {port, _} = Integer.parse(port_number)
+    else
+      port = 4040
+    end
 
     # List all child processes to be supervised
     children = [
