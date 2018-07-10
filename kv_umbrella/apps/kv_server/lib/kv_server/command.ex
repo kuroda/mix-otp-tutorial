@@ -46,7 +46,7 @@ defmodule KVServer.Command do
 
   def run({:create, bucket}) do
     name = {:via, Registry, {KV.Registry, bucket}}
-    pid = KV.Bucket.start_link([{:name, name}])
+    pid = KV.Bucket.start_link(name: name)
     KV.Router.route(bucket, Registry, :register, [KV.Registry, bucket, pid])
     {:ok, "OK\r\n"}
   end
