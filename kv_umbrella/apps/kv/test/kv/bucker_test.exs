@@ -2,7 +2,9 @@ defmodule KV.BucketTest do
   use ExUnit.Case, async: true
 
   setup do
-    {:ok, bucket} = KV.Bucket.start_link([])
+    Registry.start_link(keys: :unique, name: KV.Registry)
+    name = {:via, Registry, {KV.Registry, "shopping"}}
+    {:ok, bucket} = KV.Bucket.start_link([{:name, name}])
     %{bucket: bucket}
   end
 
